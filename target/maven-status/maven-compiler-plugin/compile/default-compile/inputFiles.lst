@@ -1,5 +1,5 @@
-C:\Users\farsi\OneDrive\Farsil\projects\order-microservice\src\main\java\com\example\ordermicroservice\model\Order.java
-C:\Users\farsi\OneDrive\Farsil\projects\order-microservice\src\main\java\com\example\ordermicroservice\repository\OrderRepository.java
-C:\Users\farsi\OneDrive\Farsil\projects\order-microservice\src\main\java\com\example\ordermicroservice\OrderMicroserviceApplication.java
-C:\Users\farsi\OneDrive\Farsil\projects\order-microservice\src\main\java\com\example\ordermicroservice\service\OrderService.java
-C:\Users\farsi\OneDrive\Farsil\projects\order-microservice\src\main\java\com\example\ordermicroservice\controller\OrderController.java
+C:\Users\farsi\OneDrive\Farsil\projects\ordermicroservice-cicd-githubActions\src\main\java\com\example\ordermicroservice\OrderMicroserviceApplication.java
+C:\Users\farsi\OneDrive\Farsil\projects\ordermicroservice-cicd-githubActions\src\main\java\com\example\ordermicroservice\controller\OrderController.java
+C:\Users\farsi\OneDrive\Farsil\projects\ordermicroservice-cicd-githubActions\src\main\java\com\example\ordermicroservice\service\OrderService.java
+C:\Users\farsi\OneDrive\Farsil\projects\ordermicroservice-cicd-githubActions\src\main\java\com\example\ordermicroservice\repository\OrderRepository.java
+C:\Users\farsi\OneDrive\Farsil\projects\ordermicroservice-cicd-githubActions\src\main\java\com\example\ordermicroservice\model\Order.java
