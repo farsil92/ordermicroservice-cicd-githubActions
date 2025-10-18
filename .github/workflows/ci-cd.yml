@@ -1,4 +1,4 @@
-name: CI-CD Pipeline
+name: Java CI/CD to EC2
 
 on:
   push:
@@ -6,29 +6,55 @@ on:
       - main
 
 jobs:
-  build:
+  build-test-docker-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Set up JDK
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'temurin'
 
+      # Build with Maven
       - name: Build with Maven
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
+      # Run tests
+      - name: Run tests
+        run: mvn test
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build Docker image
       - name: Build Docker image
-        run: docker build -t order-microservice:1.0 .
+        run: docker build -t ordermicroservice-app:latest .
 
-      - name: Push Docker image to Docker Hub
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      # Push Docker image to Docker Hub
+      - name: Push Docker image
         run: |
-          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-          docker tag order-microservice:1.0 $DOCKER_USERNAME/order-microservice:1.0
-          docker push $DOCKER_USERNAME/order-microservice:1.0
+          docker tag ordermicroservice-app:latest ${{ secrets.DOCKER_USERNAME }}/ordermicroservice-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/ordermicroservice-app:latest
+
+      # Deploy to EC2
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/ordermicroservice-app:latest
+            docker stop ordermicroservice-app || true
+            docker rm ordermicroservice-app || true
+            docker run -d -p 8083:8083 --name ordermicroservice-app ${{ secrets.DOCKER_USERNAME }}/ordermicroservice-app:latest
